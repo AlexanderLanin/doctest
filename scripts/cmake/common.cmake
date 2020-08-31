@@ -7,10 +7,12 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 enable_testing()
 
-find_package(Threads)
-
 set(DOCTEST_TEST_MODE "COMPARE" CACHE STRING "Test mode - normal/run through valgrind/collect output/compare with output")
 set_property(CACHE DOCTEST_TEST_MODE PROPERTY STRINGS "NORMAL;VALGRIND;COLLECT;COMPARE")
+
+if(${DOCTEST_TEST_MODE} STREQUAL "VALGRIND" AND NOT ARG_NO_VALGRIND)
+  find_package(Threads)
+endif()
 
 function(doctest_add_test_impl)
     cmake_parse_arguments(ARG "NO_VALGRIND;NO_OUTPUT;XML_OUTPUT;JUNIT_OUTPUT" "NAME" "COMMAND" ${ARGN})
